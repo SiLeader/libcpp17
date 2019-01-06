@@ -26,5 +26,5 @@ file(GLOB_RECURSE HEADER include/*.hpp)
 
 add_library(cpp17 STATIC ${SOURCE} ${HEADER})
 
-add_executable(test test/test.cpp test/test.hpp)
-target_link_libraries(test cpp17)
+add_executable(cpp17test test/test.cpp test/test.hpp)
+target_link_libraries(cpp17test cpp17)
