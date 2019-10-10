@@ -18,21 +18,25 @@
 #define LIBCPP17_ONLY_HPP
 
 #if __cplusplus >= 201402L
-#   define USE_OVER_CPP14(value) value
-#   define OVER_CPP14 1
-#   if __cplusplus < 201703L
-#       define USE_ONLY_CPP14(value) value
-#   endif
+#define USE_OVER_CPP14(value) value
+#define OVER_CPP14 1
+#if __cplusplus < 201703L
+#define USE_ONLY_CPP14(value) value
+#endif
+#define CONDITIONAL_OVER_CPP14(tv, fv) tv
+#define USE_ONLY_CPP11(value) /* cannot use in this version */
 #else
-#   define USE_OVER_CPP14(value) /* cannot use in this version */
-#   define USE_ONLY_CPP14(value) /* cannot use in this version */
+#define USE_ONLY_CPP11(value) value
+#define CONDITIONAL_OVER_CPP14(tv, fv) fv
+#define USE_OVER_CPP14(value) /* cannot use in this version */
+#define USE_ONLY_CPP14(value) /* cannot use in this version */
 #endif
 
 #if __cplusplus >= 201703L
-#   define USE_OVER_CPP17(value) value
-#   define OVER_CPP17 1
+#define USE_OVER_CPP17(value) value
+#define OVER_CPP17 1
 #else
-#   define USE_OVER_CPP17(value) /* cannot use in this version */
+#define USE_OVER_CPP17(value) /* cannot use in this version */
 #endif
 
 #endif //LIBCPP17_ONLY_HPP

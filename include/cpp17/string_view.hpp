@@ -20,6 +20,8 @@
 #include <stdexcept>
 #include <string>
 
+#include <cpp17/detail/only.hpp>
+
 namespace cpp17 {
     template <class CharT, class Traits = std::char_traits<CharT>>
     class basic_string_view {
@@ -57,8 +59,10 @@ namespace cpp17 {
                 : _first(str), _length(len) {
         }
 
-        constexpr basic_string_view& operator=(const basic_string_view&) noexcept = default;
-        constexpr basic_string_view& operator=(basic_string_view&&) noexcept = default;
+        USE_OVER_CPP17(constexpr)
+        basic_string_view& operator=(const basic_string_view&) noexcept = default;
+        USE_OVER_CPP17(constexpr)
+        basic_string_view& operator=(basic_string_view&&) noexcept = default;
 
         ~basic_string_view() = default;
 
@@ -117,9 +121,7 @@ namespace cpp17 {
         }
 
         constexpr const_reference at(size_type pos) const {
-            if (size() <= pos) {
-                throw std::out_of_range("");
-            }
+            return size() <= pos ? throw std::out_of_range("") : (*this)[pos];
         }
 
         constexpr const_reference front() const noexcept {
@@ -130,16 +132,19 @@ namespace cpp17 {
         }
 
     public:
-        constexpr void remove_prefix(size_type n) {
+        USE_OVER_CPP17(constexpr)
+        void remove_prefix(size_type n) {
             _first += n;
             _length -= n;
         }
-        constexpr void remove_suffix(size_type n) {
+        USE_OVER_CPP17(constexpr)
+        void remove_suffix(size_type n) {
             _length -= n;
         }
 
     public:
-        constexpr void swap(basic_string_view& s) noexcept {
+        USE_OVER_CPP17(constexpr)
+        void swap(basic_string_view& s) noexcept {
             using std::swap;
             swap(_first, s._first);
             swap(_length, s._length);
@@ -156,12 +161,14 @@ namespace cpp17 {
             return basic_string_view(data() + pos, n);
         }
 
+    private:
+        constexpr int _compare_helper(int res, int r) const {
+            return res != 0 ? res : r;
+        }
+
     public:
         constexpr int compare(basic_string_view sv) const noexcept {
-            auto rlen = std::min(size(), sv.size());
-            auto result = traits_type::compare(data(), sv.data(), rlen);
-            if (result != 0) return result;
-            return size() - sv.size();
+            return _compare_helper(traits_type::compare(data(), sv.data(), std::min(size(), sv.size())), size() - sv.size());
         }
         constexpr int compare(size_type pos1, size_type n1, basic_string_view sv) const {
             return substr(pos1, n1).compare(sv);
@@ -181,10 +188,10 @@ namespace cpp17 {
 
     public:
         constexpr bool starts_with(basic_string_view x) const noexcept {
-            return compare(0, npos, x) == 0;
+            return substr(0, x.size()) == x;
         }
         constexpr bool starts_with(value_type x) const noexcept {
-            return starts_with(basic_string_view(&x, 1));
+            return !empty() && traits_type::eq(front(), x);
         }
         constexpr bool starts_with(const CharT* x) const {
             return starts_with(basic_string_view(x));
@@ -195,10 +202,24 @@ namespace cpp17 {
             return size() >= x.size() && compare(size() - x.size(), npos, x) == 0;
         }
         constexpr bool ends_with(CharT x) const noexcept {
-            return ends_with(basic_string_view(&x, 1));
+            return !empty() && traits_type::eq(back(), x);
         }
         constexpr bool ends_with(const CharT* x) const {
             return ends_with(basic_string_view(x));
+        }
+
+    public:
+        constexpr size_type find(basic_string_view sv, size_type pos = 0) const noexcept {
+            return pos < size() ? (compare(pos, sv.size(), sv) == 0 ? pos : find(sv, ++pos)) : npos;
+        }
+        constexpr size_type find(CharT c, size_type pos = 0) const noexcept {
+            return find(basic_string_view(&c, 1), pos);
+        }
+        constexpr size_type find(const CharT* s, size_type pos, size_type n) const {
+            return find(basic_string_view(s, n), pos);
+        }
+        constexpr size_type find(const CharT* s, size_type pos = 0) const {
+            return find(basic_string_view(s), pos);
         }
 
     public:
@@ -206,6 +227,36 @@ namespace cpp17 {
             return std::basic_string<CharT>(begin(), end());
         }
     };
+
+    template <class CharT>
+    constexpr bool operator==(basic_string_view<CharT> lhs, basic_string_view<CharT> rhs) {
+        return lhs.compare(rhs) == 0;
+    }
+
+    template <class CharT>
+    constexpr bool operator!=(basic_string_view<CharT> lhs, basic_string_view<CharT> rhs) {
+        return !(lhs == rhs);
+    }
+
+    template <class CharT>
+    constexpr bool operator<(basic_string_view<CharT> lhs, basic_string_view<CharT> rhs) {
+        return lhs.compare(rhs) < 0;
+    }
+
+    template <class CharT>
+    constexpr bool operator>=(basic_string_view<CharT> lhs, basic_string_view<CharT> rhs) {
+        return !(lhs < rhs);
+    }
+
+    template <class CharT>
+    constexpr bool operator<=(basic_string_view<CharT> lhs, basic_string_view<CharT> rhs) {
+        return lhs < rhs || lhs == rhs;
+    }
+
+    template <class CharT>
+    constexpr bool operator>(basic_string_view<CharT> lhs, basic_string_view<CharT> rhs) {
+        return !(lhs <= rhs);
+    }
 
     template <class CharT>
     std::basic_string<CharT> operator+(std::basic_string<CharT> lhs, const basic_string_view<CharT>& rhs) {
@@ -238,4 +289,3 @@ namespace cpp17 {
     using u16string_view = basic_string_view<char16_t>;
     using u32string_view = basic_string_view<char32_t>;
 } // namespace cpp17
-
