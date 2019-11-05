@@ -15,6 +15,9 @@
 //
 
 #include <cpp17/any.hpp>
+#include <cpp17/optional.hpp>
+#include <cpp17/span.hpp>
+#include <cpp17/string_view.hpp>
 
 #include "test.hpp"
 
@@ -32,4 +35,22 @@ int main() {
     TEST_TRUE("value is 3", opt.value() == 3);
     opt.reset();
     TEST_TRUE("not has value", !opt.has_value());
+
+    cpp17::string_view sv;
+    TEST_TRUE("empty", sv.empty());
+    sv = "123";
+    TEST_TRUE("size = 3", sv.size() == 3);
+    TEST_TRUE("starts_with 12", sv.starts_with("12"));
+    TEST_TRUE("ends_with 23", sv.ends_with("23"));
+    TEST_TRUE("not starts_with 23", !sv.starts_with("23"));
+    TEST_TRUE("not ends_with 12", !sv.ends_with("12"));
+    TEST_TRUE("find 23 == 1", sv.find("23") == 1);
+
+    {
+        cpp17::span<int> spn;
+        TEST_TRUE("empty", spn.empty());
+    }
+    std::array<int, 10> array = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+    cpp17::span<int> spn(array);
+    TEST_TRUE("spn.size() == array.size()", spn.size() == array.size());
 }

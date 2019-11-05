@@ -1,11 +1,12 @@
 # libcpp17
-C++17 standard library for C++11 and C++14
+C++17 and C++20 standard library implementation for C++11 or more.
 
 # features
 + std::any (cpp17::any)
-+ std::optional<T> (cpp17::optional<T>)
++ std::optional (cpp17::optional)
 + std::string_view (cpp17::string_view)
-  + std::basic_string_view<T>
+  + std::basic_string_view
++ std::span (cpp17::span)
 + not to use RTTI
 + can use in C++11 or more versions
 
