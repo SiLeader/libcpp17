@@ -58,6 +58,9 @@ namespace cpp17 {
         constexpr basic_string_view(const_pointer str, size_type len) noexcept
                 : _first(str), _length(len) {
         }
+        constexpr basic_string_view(const std::basic_string<CharT>& s)
+                : _first(s.data()), _length(s.size()) {
+        }
 
         USE_OVER_CPP17(constexpr)
         basic_string_view& operator=(const basic_string_view&) noexcept = default;
