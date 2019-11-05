@@ -157,8 +157,14 @@ namespace cpp17 {
             return n;
         }
 
+    private:
+        constexpr size_type _substr_helper(size_type a, size_type b) const {
+            return a < b ? a : b;
+        }
+
+    public:
         constexpr basic_string_view substr(size_type pos = 0, size_type n = npos) const {
-            return basic_string_view(data() + pos, n);
+            return basic_string_view(data() + pos, _substr_helper(size() - pos, n));
         }
 
     private:
