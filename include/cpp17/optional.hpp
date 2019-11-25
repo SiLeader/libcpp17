@@ -41,7 +41,7 @@ namespace cpp17 {
         using value_type = T;
 
     private:
-        alignas(alignof(T)) char _cb[sizeof(T)];
+        std::aligned_storage<sizeof(T), alignof(T)> _cb;
         T* _buf;
 
     public:
