@@ -117,7 +117,7 @@ namespace cpp17 {
         template <class... Args>
         T& emplace(Args&&... args) {
             reset();
-            _buf = new T(std::forward<Args>(args)...);
+            _buf = new (&_cb)T(std::forward<Args>(args)...);
             return *_buf;
         }
         void reset() {
