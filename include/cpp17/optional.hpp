@@ -41,7 +41,7 @@ namespace cpp17 {
         using value_type = T;
 
     private:
-        std::aligned_storage<sizeof(T), alignof(T)> _cb;
+        typename std::aligned_storage<sizeof(T), alignof(T)> ::type _cb;
         T* _buf;
 
     public:
