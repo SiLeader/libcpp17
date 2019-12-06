@@ -75,7 +75,7 @@ namespace cpp17 {
                 std::is_nothrow_move_constructible<T>::value)
                 : _cb(), _buf() {
             if (rhs.has_value()) {
-                (*_buf) = std::move(*rhs._buf);
+                emplace(std::move(*rhs._buf));
             }
         }
 
@@ -95,7 +95,7 @@ namespace cpp17 {
                 std::is_nothrow_move_assignable<T>::value) {
             reset();
             if (rhs.has_value()) {
-                (*_buf) = std::move(*rhs._buf);
+                emplace(std::move(*rhs._buf));
             }
             return *this;
         }
