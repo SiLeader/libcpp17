@@ -24,7 +24,7 @@ set(CMAKE_CXX_STANDARD 11)
 file(GLOB_RECURSE SOURCE src/*.cpp)
 file(GLOB_RECURSE HEADER include/*.hpp)
 
-add_library(cpp17 STATIC ${SOURCE} ${HEADER} include/cpp17/span.hpp include/cpp17/detail/dynamic_extent.hpp include/cpp17/detail/utility.hpp)
+add_library(cpp17 STATIC ${SOURCE} ${HEADER} include/cpp17/span.hpp include/cpp17/detail/dynamic_extent.hpp include/cpp17/detail/utility.hpp include/cpp17/detail/variant_size.hpp include/cpp17/detail/variant_alternative.hpp include/cpp17/variant.hpp)
 
 add_executable(cpp17test test/test.cpp test/test.hpp)
 target_link_libraries(cpp17test cpp17)

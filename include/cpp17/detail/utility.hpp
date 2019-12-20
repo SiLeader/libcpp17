@@ -54,6 +54,21 @@ namespace cpp17 {
     T* end(T (&a)[N]) {
         return a;
     }
+
+    namespace detail {
+        template <class T, T...>
+        struct max_of;
+
+        template <class T, T v1, T... vs>
+        struct max_of<T, v1, vs...> {
+            static constexpr T value = v1 > max_of<T, vs...>::value ? v1 : max_of<T, vs...>::value;
+        };
+
+        template <class T, T v1>
+        struct max_of<T, v1> {
+            static constexpr T value = v1;
+        };
+    } // namespace detail
 } // namespace cpp17
 
 #endif //LIBCPP17_UTILITY_HPP
