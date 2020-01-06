@@ -41,7 +41,7 @@ namespace cpp17 {
         using value_type = T;
 
     private:
-        typename std::aligned_storage<sizeof(T), alignof(T)> ::type _cb;
+        typename std::aligned_storage<sizeof(T), alignof(T)>::type _cb;
         T* _buf;
 
     public:
@@ -52,14 +52,14 @@ namespace cpp17 {
                 : optional() {
         }
         constexpr optional(const T& v)
-                : _cb(), _buf(new (_cb) T(v)) {
+                : _cb(), _buf(new (&_cb) T(v)) {
         }
         constexpr optional(T&& v)
-                : _cb(), _buf(new (_cb) T(std::move(v))) {
+                : _cb(), _buf(new (&_cb) T(std::move(v))) {
         }
         template <class... Args>
         explicit constexpr optional(in_place_t, Args&&... args)
-                : _cb(), _buf(new (_cb) T(std::forward<Args>(args)...)) {
+                : _cb(), _buf(new (&_cb) T(std::forward<Args>(args)...)) {
         }
 
         USE_OVER_CPP14(constexpr)
