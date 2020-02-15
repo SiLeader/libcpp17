@@ -47,17 +47,17 @@ namespace cpp17 {
         static constexpr index_type extent = Extent;
 
     private:
-        pointer _data;
+        const_pointer _data;
         index_type _length;
 
     public:
         constexpr span() noexcept
                 : _data(nullptr), _length(0) {
         }
-        constexpr span(pointer ptr, index_type count)
+        constexpr span(const_pointer ptr, index_type count)
                 : _data(ptr), _length(count) {
         }
-        constexpr span(pointer first, pointer last)
+        constexpr span(const_pointer first, const_pointer last)
                 : span(first, last - first) {
         }
 
