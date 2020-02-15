@@ -133,24 +133,24 @@ namespace cpp17 {
         }
 
     public:
-        constexpr reference operator[](index_type i) const {
+        constexpr const_reference operator[](index_type i) const {
             return data()[i];
         }
-        constexpr reference front() const {
+        constexpr const_reference front() const {
             return (*this)[0];
         }
-        constexpr reference back() const {
+        constexpr const_reference back() const {
             return (*this)[size() - 1];
         }
-        constexpr pointer data() const noexcept {
+        constexpr const_pointer data() const noexcept {
             return _data;
         }
 
     public:
-        constexpr iterator begin() const noexcept {
+        constexpr const_iterator begin() const noexcept {
             return data();
         }
-        constexpr iterator end() const noexcept {
+        constexpr const_iterator end() const noexcept {
             return data() + size();
         }
         constexpr const_iterator cbegin() const noexcept {
