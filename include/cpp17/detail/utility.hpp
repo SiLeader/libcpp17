@@ -13,7 +13,7 @@ namespace cpp17 {
         return t.size();
     }
     template <class T, std::size_t N>
-    std::size_t size(const T (&a)[N]) {
+    std::size_t size(const T (&)[N]) {
         return N;
     }
 
